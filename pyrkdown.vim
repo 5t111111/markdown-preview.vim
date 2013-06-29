@@ -7,7 +7,7 @@
 
 let g:path_to_this = expand("<sfile>:p:h")
 
-function! DoMarkdownParse()
+function! ParseMarkdownSyntax()
 
 " Set the path directory contains python module(s)
 python << EOF
@@ -61,7 +61,7 @@ class MarkDownParse(object):
     def __init__(self):
         self._plugin_dir = vim.eval('g:path_to_this')
         self._css_path = os.path.join(plugin_dir, 'markdown.css')
-        self._temp_file_path = os.path.join(plugin_dir, 'mdparse.tmp.html')
+        self._temp_file_path = os.path.join(plugin_dir, 'pyrkdown.tmp.html')
 
     def _read_css(self):
         with open(self._css_path, 'r') as f:
@@ -73,7 +73,7 @@ class MarkDownParse(object):
 <html lang=\"ja\">
 <head>
 <meta charset=\"utf8\">
-<title>Markdown Parser</title>
+<title>Pyrkdown</title>
 </head>
 <style>
 """, self._read_css(), """
@@ -99,8 +99,8 @@ class MarkDownParse(object):
     
         src = ''.join(src) 
         
-        enc = guess_encoding(src);
-        u_src = convert_encoding(src, enc)
+        enc = EncodingUtils.guess_encoding(src);
+        u_src = EncodingUtils.convert_encoding(src, enc)
     
         dirty_html = ''.join([self._make_header(), markdown2.markdown(u_src), self._make_footer()])
         
@@ -111,17 +111,17 @@ class MarkDownParse(object):
             # Failed to prettify a dirty HTML...
             pretty_html = dirty_html
         
-        with open(temp_file_path, 'w') as f:
+        with open(self._temp_file_path, 'w') as f:
             f.write(pretty_html.encode('utf_8'))
             if sys.platform[:3] == "win":
-                webbrowser.open(temp_file_path)
+                webbrowser.open(self._temp_file_path)
             else:
-                webbrowser.open('file://' + temp_file_path)
+                webbrowser.open('file://' + self._temp_file_path)
     
 mdp = MarkDownParse()
 mdp.create_html()
 EOF
 endfunction
 
-command! MarkdownParse :call DoMarkdownParse()
+command! Pyrkdown :call ParseMarkdownSyntax()
 
