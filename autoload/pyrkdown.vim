@@ -5,6 +5,9 @@
 " Beautiful Soup
 " http://www.crummy.com/software/BeautifulSoup
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 let g:path_to_this = expand("<sfile>:p:h")
 
 function! ParseMarkdownSyntax()
@@ -124,4 +127,7 @@ EOF
 endfunction
 
 command! Pyrkdown :call ParseMarkdownSyntax()
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
