@@ -5,6 +5,11 @@
 " Beautiful Soup
 " http://www.crummy.com/software/BeautifulSoup
 
+if exists('g:loaded_pyrkdown')
+  finish
+endif
+let g:loaded_pyrkdown = 1
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -15,10 +20,11 @@ function! ParseMarkdownSyntax()
 " Set the path directory contains python module(s)
 python << EOF
 import vim
+import os
 import site
 
 plugin_dir = vim.eval('g:path_to_this')
-site.addsitedir(plugin_dir)
+site.addsitedir(os.path.join(plugin_dir, 'lib'))
 EOF
 
 python << EOF
