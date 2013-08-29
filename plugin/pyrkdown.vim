@@ -4,36 +4,36 @@
 " Beautiful Soup
 " http://www.crummy.com/software/BeautifulSoup
 
-"if exists('g:loaded_pyrkdown')
-"  finish
-"endif
+if exists('g:loaded_pyrkdown')
+  finish
+endif
 let g:loaded_pyrkdown = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! s:LoadPythonModulePath()
-    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_lib/bs4/__init__.py"), '\n')
-        let l:python_module_path = fnamemodify(l:i, ":p:h:h")
+    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_lib"), '\n')
+        let s:python_module_path = fnamemodify(l:i, ":p")
     endfor
     python << EOF
 import vim
 import site
 
-site.addsitedir(vim.eval('l:python_module_path'))
+site.addsitedir(vim.eval('s:python_module_path'))
 EOF
 endfunction
 
-function! s:SetStaticFilePath()
-    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_static"), '\n')
-        let l:static_file_path = fnamemodify(l:i, ":p:h:h")
+function! s:SetAdditionalFilePath()
+    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_files"), '\n')
+        let s:additional_file_path = fnamemodify(l:i, ":p")
     endfor
 endfunction
 
 function! g:Pyrkdown()
 
     call s:LoadPythonModulePath()
-    call s:SetStaticFilePath()
+    call s:SetAdditionalFilePath()
 
     python << EOF
 import os
@@ -71,14 +71,13 @@ class EncodingUtils(object):
 
 class MarkDownParse(object):
 
-    _plugin_dir = None
     _css_path = None
     _temp_file_path = None
 
     def __init__(self):
-        self._plugin_dir = vim.eval('l:static_file_path')
-        self._css_path = os.path.join(plugin_dir, 'markdown.css')
-        self._temp_file_path = os.path.join(plugin_dir, 'pyrkdown.tmp.html')
+        additional_file_path = vim.eval('s:additional_file_path')
+        self._css_path = os.path.join(additional_file_path, 'markdown.css')
+        self._temp_file_path = os.path.join(additional_file_path, 'pyrkdown.tmp.html')
 
     def _read_css(self):
         with open(self._css_path, 'r') as f:
