@@ -28,7 +28,6 @@ function! s:SetStaticFilePath()
     for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_static"), '\n')
         let l:static_file_path = fnamemodify(l:i, ":p:h:h")
     endfor
-EOF
 endfunction
 
 function! g:Pyrkdown()
