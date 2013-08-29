@@ -25,9 +25,9 @@ site.addsitedir(os.path.join(plugin_dir, 'lib'))
 EOF
 endfunction
 
-call s:AddPythonModuleDir()
-
 function! g:Pyrkdown()
+
+    call s:AddPythonModuleDir()
 
     python << EOF
 import os
