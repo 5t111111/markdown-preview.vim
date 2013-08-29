@@ -4,30 +4,37 @@
 " Beautiful Soup
 " http://www.crummy.com/software/BeautifulSoup
 
-if exists('g:loaded_pyrkdown')
-  finish
-endif
+"if exists('g:loaded_pyrkdown')
+"  finish
+"endif
 let g:loaded_pyrkdown = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Add the path directory contains python module(s)
-function! s:AddPythonModuleDir()
-    let l:path_to_this = expand("<sfile>:p:h")
+function! s:LoadPythonModulePath()
+    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_lib/bs4/__init__.py"), '\n')
+        let l:python_module_path = fnamemodify(l:i, ":p:h:h")
+    endfor
     python << EOF
 import vim
-import os
 import site
 
-plugin_dir = vim.eval('l:path_to_this')
-site.addsitedir(os.path.join(plugin_dir, 'lib'))
+site.addsitedir(vim.eval('l:python_module_path'))
+EOF
+endfunction
+
+function! s:SetStaticFilePath()
+    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_static"), '\n')
+        let l:static_file_path = fnamemodify(l:i, ":p:h:h")
+    endfor
 EOF
 endfunction
 
 function! g:Pyrkdown()
 
-    call s:AddPythonModuleDir()
+    call s:LoadPythonModulePath()
+    call s:SetStaticFilePath()
 
     python << EOF
 import os
@@ -70,7 +77,7 @@ class MarkDownParse(object):
     _temp_file_path = None
 
     def __init__(self):
-        self._plugin_dir = vim.eval('g:path_to_this')
+        self._plugin_dir = vim.eval('l:static_file_path')
         self._css_path = os.path.join(plugin_dir, 'markdown.css')
         self._temp_file_path = os.path.join(plugin_dir, 'pyrkdown.tmp.html')
 
