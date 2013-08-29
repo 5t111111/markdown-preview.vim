@@ -17,6 +17,7 @@ function! s:AddPythonModuleDir()
     let l:path_to_this = expand("<sfile>:p:h")
     python << EOF
 import vim
+import os
 import site
 
 plugin_dir = vim.eval('l:path_to_this')
@@ -24,9 +25,9 @@ site.addsitedir(os.path.join(plugin_dir, 'lib'))
 EOF
 endfunction
 
-function! g:Pyrkdown()
+call s:AddPythonModuleDir()
 
-    call s:AddPythonModuleDir()
+function! g:Pyrkdown()
 
     python << EOF
 import os
