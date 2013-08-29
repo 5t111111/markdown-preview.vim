@@ -1,4 +1,3 @@
-
 " python-markdown2
 " https://github.com/trentm/python-markdown2
 "
@@ -13,21 +12,23 @@ let g:loaded_pyrkdown = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let g:path_to_this = expand("<sfile>:p:h")
-
-function! ParseMarkdownSyntax()
-
-" Set the path directory contains python module(s)
-python << EOF
+" Add the path directory contains python module(s)
+function! s:AddPythonModuleDir()
+    let l:path_to_this = expand("<sfile>:p:h")
+    python << EOF
 import vim
-import os
 import site
 
-plugin_dir = vim.eval('g:path_to_this')
+plugin_dir = vim.eval('l:path_to_this')
 site.addsitedir(os.path.join(plugin_dir, 'lib'))
 EOF
+endfunction
 
-python << EOF
+function! g:Pyrkdown()
+
+    call s:AddPythonModuleDir()
+
+    python << EOF
 import os
 import webbrowser
 from bs4 import BeautifulSoup
@@ -40,7 +41,7 @@ class EncodingUtils(object):
         """
         Guess the encoding of the data sepecified 
         """
-        codecs = ('ascii', 'shift_jis', 'euc_jp', 'utf_8', 'utf_16')
+        codecs = ('ascii', 'shift_jis', 'euc_jp', 'utf_8')
         f = lambda data, enc: data.decode(enc) and enc
     
         for codec in codecs:
@@ -132,7 +133,7 @@ mdp.create_html()
 EOF
 endfunction
 
-command! Pyrkdown :call ParseMarkdownSyntax()
+command! Pyrkdown :call g:Pyrkdown()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
