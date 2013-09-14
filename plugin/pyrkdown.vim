@@ -40,34 +40,7 @@ import os
 import webbrowser
 from bs4 import BeautifulSoup
 import markdown2
-
-class EncodingUtils(object):
-
-    @classmethod
-    def guess_encoding(cls, data):
-        """
-        Guess the encoding of the data sepecified 
-        """
-        codecs = ('ascii', 'shift_jis', 'euc_jp', 'utf_8')
-        f = lambda data, enc: data.decode(enc) and enc
-    
-        for codec in codecs:
-            try:
-                f(data, codec)
-                return codec
-            except:
-                pass;
-    
-        return None
-    
-    @classmethod
-    def convert_encoding(cls, data, codec_from, codec_to='utf_8'):
-        """
-        Convert the encoding of the data to the specifed encoding
-        """
-        udata = data.decode(codec_from)
-        if (isinstance(udata, unicode)):
-            return udata.encode(codec_to, errors='ignore') 
+import chardet
 
 class MarkDownParse(object):
 
@@ -81,8 +54,16 @@ class MarkDownParse(object):
 
     def _read_css(self):
         with open(self._css_path, 'r') as f:
-            return f.read()
-    
+            css = ''
+            uniconv = lambda x: x.decode(chardet.detect(x)['encoding'])
+            line = f.readline()
+            while line:
+                line = uniconv(line)
+                css = ''.join([css, line])
+                line = f.readline()
+
+            return css.encode('utf_8', errors='replace')
+
     def _make_header(self):
         html = ''.join(["""
 <!DOCTYPE html>
@@ -96,15 +77,15 @@ class MarkDownParse(object):
 </style><body>
 """])
         return html
-    
+
     def _make_footer(self):
         html = '</body></html>'
         return html
-    
+
     def create_html(self):
         lines = vim.current.buffer[:]
         src = []
-    
+
         for line in lines:
             # Do not ignore continuous newlines... 
             if(line == ''):
@@ -112,28 +93,35 @@ class MarkDownParse(object):
             else:
                 src.append(line)
             src.append('\n')
-    
-        src = ''.join(src) 
-        
-        enc = EncodingUtils.guess_encoding(src);
-        u_src = EncodingUtils.convert_encoding(src, enc)
-    
-        dirty_html = ''.join([self._make_header(), markdown2.markdown(u_src), self._make_footer()])
-        
+
+        content = ''.join(src) 
+
+        uniconv = lambda x: x.decode(chardet.detect(x)['encoding'])
+
+        content = uniconv(content)
+        content = markdown2.markdown(content)
+        header = self._make_header()
+        header = uniconv(header)
+        footer = self._make_footer()
+        footer = uniconv(footer)
+
+        html = ''.join([header, content, footer])
+        dirty_html = html
+ 
         try:
             soup = BeautifulSoup(dirty_html)
-            pretty_html = soup.prettify()
+            html = soup.prettify()
         except:
             # Failed to prettify a dirty HTML...
-            pretty_html = dirty_html
-        
+            html = dirty_html
+
         with open(self._temp_file_path, 'w') as f:
-            f.write(pretty_html.encode('utf_8'))
+            f.write(html.encode('utf_8', errors='replace'))
             if sys.platform[:3] == "win":
                 webbrowser.open(self._temp_file_path)
             else:
                 webbrowser.open('file://' + self._temp_file_path)
-    
+
 mdp = MarkDownParse()
 mdp.create_html()
 EOF
