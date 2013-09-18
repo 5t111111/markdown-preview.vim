@@ -12,18 +12,9 @@ Usage
 3. Parsed HTML appears on your web browser.
    See how your document looks.
 
-__Modify markdown.css if you don't like it.__
-
-Thanks
---------
-These are the libraries used in pyrkdown.vim.  
-
-* python-markdown2  
-  https://github.com/trentm/python-markdown2
-
-* Beautiful Soup  
-  http://www.crummy.com/software/BeautifulSoup
+__Change markdown.css if you don't like it.__
 
 License
 ---------
 MIT
+
