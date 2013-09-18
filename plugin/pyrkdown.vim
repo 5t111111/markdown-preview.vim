@@ -1,9 +1,3 @@
-" python-markdown2
-" https://github.com/trentm/python-markdown2
-"
-" Beautiful Soup
-" http://www.crummy.com/software/BeautifulSoup
-
 if exists('g:loaded_pyrkdown')
   finish
 endif
