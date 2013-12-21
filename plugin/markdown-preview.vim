@@ -1,13 +1,13 @@
-if exists('g:loaded_pyrkdown')
+if exists('g:loaded_markdown-preview')
   finish
 endif
-let g:loaded_pyrkdown = 1
+let g:loaded_markdown-preview = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! s:LoadPythonModulePath()
-    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_lib"), '\n')
+    for l:i in split(globpath(&runtimepath, "plugin/markdown-preview_lib"), '\n')
         let s:python_module_path = fnamemodify(l:i, ":p")
     endfor
     python << EOF
@@ -19,12 +19,12 @@ EOF
 endfunction
 
 function! s:SetAdditionalFilePath()
-    for l:i in split(globpath(&runtimepath, "plugin/pyrkdown_files"), '\n')
+    for l:i in split(globpath(&runtimepath, "plugin/markdown-preview_files"), '\n')
         let s:additional_file_path = fnamemodify(l:i, ":p")
     endfor
 endfunction
 
-function! g:Pyrkdown()
+function! g:MarkdownPreview()
 
     call s:LoadPythonModulePath()
     call s:SetAdditionalFilePath()
@@ -44,7 +44,7 @@ class MarkDownParse(object):
     def __init__(self):
         additional_file_path = vim.eval('s:additional_file_path')
         self._css_path = os.path.join(additional_file_path, 'markdown.css')
-        self._temp_file_path = os.path.join(additional_file_path, 'pyrkdown.tmp.html')
+        self._temp_file_path = os.path.join(additional_file_path, 'markdown-preview.tmp.html')
 
     def _read_css(self):
         with open(self._css_path, 'r') as f:
@@ -64,7 +64,7 @@ class MarkDownParse(object):
 <html lang=\"ja\">
 <head>
 <meta charset=\"utf8\">
-<title>Pyrkdown</title>
+<title>markdown-preview</title>
 </head>
 <style>
 """, self._read_css(), """
@@ -121,7 +121,7 @@ mdp.create_html()
 EOF
 endfunction
 
-command! Pyrkdown :call g:Pyrkdown()
+command! md :call g:MarkdownPreview()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
