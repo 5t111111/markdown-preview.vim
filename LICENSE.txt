@@ -20,8 +20,13 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 =======================================================================
- "python-markdown2" is licensed under MIT
-  https://github.com/trentm/python-markdown2
+ "Markdown" is licensed under BSD
+  https://pypi.python.org/pypi/Markdown
+=======================================================================
+
+=======================================================================
+ "Pygments" is licensed under BSD
+  https://pypi.python.org/pypi/Pygments
 =======================================================================
 
 =======================================================================
