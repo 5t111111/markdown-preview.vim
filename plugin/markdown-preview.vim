@@ -1,7 +1,7 @@
-if exists('g:loaded_markdown-preview')
+if exists('g:loaded_markdown_preview')
   finish
 endif
-let g:loaded_markdown-preview = 1
+let g:loaded_markdown_preview = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -121,7 +121,7 @@ mdp.create_html()
 EOF
 endfunction
 
-command! md :call g:MarkdownPreview()
+command! Md :call g:MarkdownPreview()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
