@@ -370,6 +370,7 @@ pre {
 
 
 /* Pygments monokai */
+.codehilite { background-color: #000000 }
 .codehilite .hll { background-color: #49483e }
 .codehilite .c { color: #75715e } /* Comment */
 .codehilite .err { color: #960050; background-color: #1e0010 } /* Error */
