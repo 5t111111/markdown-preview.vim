@@ -33,8 +33,8 @@ function! g:Pyrkdown()
 import os
 import webbrowser
 from bs4 import BeautifulSoup
-import markdown2
 import chardet
+import markdown
 
 class MarkDownParse(object):
 
@@ -93,7 +93,7 @@ class MarkDownParse(object):
         uniconv = lambda x: x.decode(chardet.detect(x)['encoding'])
 
         content = uniconv(content)
-        content = markdown2.markdown(content)
+        content = markdown.markdown(content, extensions=['extra', 'codehilite', 'nl2br'])
         header = self._make_header()
         header = uniconv(header)
         footer = self._make_footer()
