@@ -7,7 +7,7 @@ markdown-preview.vim is a markdown parse plugin for Vim. While you are editing m
 Usage
 -------
 1. Open markdown syntax file on your buffer.
-2. ```:Md```
+2. ```:md```
 3. Parsed HTML appears on your web browser.
    See how your document looks.
 

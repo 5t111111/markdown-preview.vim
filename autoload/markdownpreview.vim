@@ -1,13 +1,8 @@
-if exists('g:loaded_markdown_preview')
-  finish
-endif
-let g:loaded_markdown_preview = 1
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! s:LoadPythonModulePath()
-    for l:i in split(globpath(&runtimepath, "plugin/markdown-preview_lib"), '\n')
+    for l:i in split(globpath(&runtimepath, "markdownpreview_lib"), '\n')
         let s:python_module_path = fnamemodify(l:i, ":p")
     endfor
     python << EOF
@@ -19,12 +14,12 @@ EOF
 endfunction
 
 function! s:SetAdditionalFilePath()
-    for l:i in split(globpath(&runtimepath, "plugin/markdown-preview_files"), '\n')
+    for l:i in split(globpath(&runtimepath, "markdownpreview_files"), '\n')
         let s:additional_file_path = fnamemodify(l:i, ":p")
     endfor
 endfunction
 
-function! g:MarkdownPreview()
+function! markdownpreview#MarkdownPreview()
 
     call s:LoadPythonModulePath()
     call s:SetAdditionalFilePath()
@@ -120,8 +115,6 @@ mdp = MarkDownParse()
 mdp.create_html()
 EOF
 endfunction
-
-command! Md :call g:MarkdownPreview()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
