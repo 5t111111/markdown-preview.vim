@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Preview</title>
+        <style>
+        {{ CSS }}
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <span id="markdown-file-name">Loading...</span>
+            <small><span id="last-modified"></span></small>
+        </div>
+        <div id="preview">
+            {{ CONTENT }}
+        </div>
+        <div id="footer">
+            <script src="js/marked-0.2.9.js"></script>
+            <script src="js/previm.js"></script>
+            <div id="monitor"></div>
+        </div>
+    </body>
+</html>
