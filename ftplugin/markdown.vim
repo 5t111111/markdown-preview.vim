@@ -3,4 +3,4 @@ if exists('g:loaded_markdownpreview')
 endif
 let g:loaded_markdownpreview = 1
 
-command! Md :call markdownpreview#MarkdownPreview()
+command! MdPreview :call markdownpreview#MarkdownPreview()
